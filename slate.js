@@ -1,5 +1,7 @@
 var c = document.getElementById("slate");
-var b = document.getElementById("button");
+var circle = document.getElementById("circle");
+var dvd = document.getElementById("dvd");
+var stop = document.getElementById("stop");
 var ctx = c.getContext("2d");
 
 ctx.fillStyle = "#00f0fa";
@@ -16,7 +18,7 @@ function clear(event) {
     ctx.beginPath();
 }
 
-function circle(event) {
+function circleGrow(event) {
     //var x = event.clientX - 10;     // Get the horizontal coordinate
     //var y = event.clientY - 60;     // Get the vertical coordinate
     var x = event.offsetX;     // Get the horizontal coordinate
@@ -32,35 +34,48 @@ var rid = 0;
 //var x = 0;
 //var y = 0;
 
-var animateDot = function(){
-    var x = 0; //no longer global variable, just global to oneCircle
-    var y = 0;
+var circleGrowth = function(){
+    var x = 400;
+    var y = 400;
+    var radius = 1;
     window.cancelAnimationFrame(rid);
-    var oneCircle = function(){
-	ctx.clearRect(0, 0, 800, 800);   
-	rid = window.requestAnimationFrame(oneCircle);
-	console.log(rid);
-	ctx.beginPath();
-	ctx.arc(x,y,10,0,2*Math.PI);
-	ctx.fill();
-	ctx.stroke();
-	x++;
-	y++;
+    //var oneCircle = function(){
+    if (radius=400){
+	var shrink = function(){
+	    if (radius>0){
+		rid = window.requestAnimationFrame(shrink);
+		ctx.clearRect(0, 0, 800, 800);   
+		ctx.beginPath();
+		ctx.arc(x,y,radius,0,2*Math.PI);
+		ctx.fill();
+		radius--;
+	    }
+	};
+	//radius--;
+	shrink();
+    }else if (radius<400){
+	var grow = function(){
+	    rid = window.requestAnimationFrame(grow);
+	    ctx.clearRect(0, 0, 800, 800);   
+	    ctx.beginPath();
+	    ctx.arc(x,y,radius,0,2*Math.PI);
+	    ctx.fill();
+	    radius++;
+	};
+	//radius++;
+	grow();
     };
-    oneCircle(); //then call it
+
+    //};
+    //oneCircle(); //then call it
 };
 
 var stopit = function(){
     window.cancelAnimationFrame(rid)
 };
 
+stop.addEventListener("click", stopit);
+//dvd.addEventListener("click", bounce);
+circle.addEventListener("click", circleGrowth);
 
-
-//var sb = ctx.document.getElementById('button');
-b.addEventListener("click", stopit);
-//c.addEventListener("click", oneCircle);
-c.addEventListener("click", animateDot);
-
-//b.addEventListener('click', clear);
-//oneCircle();
 
