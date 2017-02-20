@@ -3,6 +3,12 @@ var circle = document.getElementById("circle");
 var dvd = document.getElementById("dvd");
 var stop = document.getElementById("stop");
 var ctx = c.getContext("2d");
+var img =new Image() //creates a variable for a new image
+img.src = "dvd.png" // specifies the location of the image
+
+
+
+
 
 ctx.fillStyle = "#00f0fa";
 
@@ -77,12 +83,36 @@ var circleGrowth = function(){
 
 };
 
+var bounce = function(){
+    var x = Math.random() * 710;
+    var y = Math.random() * 710;
+    var dx = 2;
+    var dy = 2;
+   // window.cancelAnimationFrame(rid);
+    var boing = function(){
+	window.cancelAnimationFrame(rid);
+	ctx.clearRect(0, 0, 800, 800);   
+	ctx.drawImage(img,x,y,100,100);
+	ctx.beginPath();
+	if (x<=0 || x>=710){
+	    dx*=-1;
+	}
+	else if (y>=710 || y<=0){
+	    dy*=-1;
+	}
+	x+=dx;
+	y+=dy
+	rid = window.requestAnimationFrame(boing);
+    }
+    boing();
+}
+
 var stopit = function(){
     window.cancelAnimationFrame(rid)
 };
 
 stop.addEventListener("click", stopit);
-//dvd.addEventListener("click", bounce);
+dvd.addEventListener("click", bounce);
 circle.addEventListener("click", circleGrowth);
 
 
