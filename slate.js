@@ -18,9 +18,7 @@ function clear(event) {
     ctx.beginPath();
 }
 
-function circleGrow(event) {
-    //var x = event.clientX - 10;     // Get the horizontal coordinate
-    //var y = event.clientY - 60;     // Get the vertical coordinate
+function circle(event) {
     var x = event.offsetX;     // Get the horizontal coordinate
     var y = event.offsetY;     // Get the vertical coordinate
     ctx.lineTo(x,y);
@@ -39,35 +37,44 @@ var circleGrowth = function(){
     var y = 400;
     var radius = 1;
     window.cancelAnimationFrame(rid);
-    //var oneCircle = function(){
-    if (radius=400){
-	var shrink = function(){
-	    if (radius>0){
-		rid = window.requestAnimationFrame(shrink);
-		ctx.clearRect(0, 0, 800, 800);   
-		ctx.beginPath();
-		ctx.arc(x,y,radius,0,2*Math.PI);
-		ctx.fill();
-		radius--;
-	    }
-	};
-	//radius--;
-	shrink();
-    }else if (radius<400){
-	var grow = function(){
+    var shrink = function(){
+	window.cancelAnimationFrame(rid);
+	ctx.clearRect(0, 0, 800, 800);   
+	ctx.beginPath();
+	ctx.arc(x,y,radius,0,2*Math.PI);
+	ctx.fill();
+	radius--;
+	if (radius>0){
+	    rid = window.requestAnimationFrame(shrink);
+	    //console.log(radius);
+	}
+	else {
 	    rid = window.requestAnimationFrame(grow);
-	    ctx.clearRect(0, 0, 800, 800);   
-	    ctx.beginPath();
-	    ctx.arc(x,y,radius,0,2*Math.PI);
-	    ctx.fill();
-	    radius++;
+	    //console.log(radius);
 	};
-	//radius++;
+    };
+    var grow = function(){
+	window.cancelAnimationFrame(rid);
+	ctx.clearRect(0, 0, 800, 800);   
+	ctx.beginPath();
+	radius++;
+	ctx.arc(x,y,radius,0,2*Math.PI);
+	ctx.fill();
+	if (radius<400){
+	    rid = window.requestAnimationFrame(grow);
+	}
+	else{
+	    rid = window.requestAnimationFrame(shrink);
+	};
+    };
+    if (radius>=400){
+	rid = window.requestAnimationFrame(shrink);
+	shrink();
+    }else{
+	rid = window.requestAnimationFrame(grow);
 	grow();
     };
 
-    //};
-    //oneCircle(); //then call it
 };
 
 var stopit = function(){
